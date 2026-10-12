@@ -10,7 +10,6 @@ from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit, parse_qs
 from privacy import shared_report
-from directory_audit import review_policy
 
 ROOT = Path(__file__).resolve().parent
 DATA = Path(os.environ.get("OPENSOC_DATA_DIR", str(ROOT / "data"))).resolve()
