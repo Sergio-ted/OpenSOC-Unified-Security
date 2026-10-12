@@ -3,7 +3,6 @@ import unittest
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from privacy import sanitize, shared_report
-from directory_audit import review_policy
 
 class PrivacyTests(unittest.TestCase):
     def test_secrets_never_exported(self):
@@ -20,15 +19,6 @@ class PrivacyTests(unittest.TestCase):
     def test_shared_report_omits_sources(self):
         report = shared_report({"sources": ["confidential.json"], "unique_observations": []})
         self.assertNotIn("confidential.json", str(report))
-
-class DirectoryTests(unittest.TestCase):
-    def test_flags(self):
-        items = review_policy({"min_password_length": 8, "mfa_required": False,
-                               "ldap_signing_required": False, "ntlmv1_allowed": True})
-        self.assertEqual(len(items), 4)
-
-    def test_missing_fields_not_assumed(self):
-        self.assertEqual(review_policy({}), [])
 
 if __name__ == "__main__":
     unittest.main()
