@@ -1,0 +1,22 @@
+name: Unified Security builds
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -v
+      - run: python -m pip install pyinstaller==6.16.0
+      - run: python -m PyInstaller --noconfirm --clean --onefile --name OpenSOC-Unified-Security app.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OpenSOC-Unified-Security-${{ matrix.os }}
+          path: dist/*
+          if-no-files-found: error
